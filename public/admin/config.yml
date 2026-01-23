@@ -8,20 +8,9 @@ public_folder: "/images/uploads"
 locale: "en"
 
 collections:
-  # Pages collection - multilingual
+  # Pages collection - multilingual (files collection)
   - name: "pages"
     label: "Pages"
-    folder: "src/content/pages"
-    create: false
-    delete: false
-    slug: "{{lang}}/{{slug}}"
-    fields:
-      - {label: "Language", name: "lang", widget: "select", options: ["en", "es", "it", "gr"]}
-      - {label: "Title", name: "title", widget: "string"}
-      - {label: "Description", name: "description", widget: "text", required: false}
-      - {label: "Body", name: "body", widget: "markdown"}
-    filter:
-      field: lang
     files:
       # English Pages
       - label: "Home (EN)"
