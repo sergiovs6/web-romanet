@@ -1,0 +1,75 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import Card from '../../../components/Card.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'gr' } }
+  ];
+}
+
+const { lang } = Astro.params as { lang: 'en' | 'es' | 'it' | 'gr' };
+
+// Get news page content
+const newsPage = await getEntry('pages', `${lang}/news`);
+
+// Get all news articles for this language
+const allNews = await getCollection('news', ({ id }) => {
+  return id.startsWith(`${lang}/`);
+});
+
+// Sort by date (newest first)
+const sortedNews = allNews.sort((a, b) => 
+  b.data.pubDate.getTime() - a.data.pubDate.getTime()
+);
+---
+
+<Layout 
+  title={newsPage?.data.title || 'News'} 
+  description={newsPage?.data.description}
+  lang={lang}
+>
+  <h1>{newsPage?.data.title || 'News'}</h1>
+  
+  {newsPage && (
+    <div class="content mb-lg">
+      {newsPage.data.description && <p class="lead">{newsPage.data.description}</p>}
+    </div>
+  )}
+  
+  <div class="grid grid-3">
+    {sortedNews.map((article) => (
+      <Card
+        title={article.data.title}
+        description={article.data.description}
+        category={article.data.category}
+        image={article.data.image}
+        link={`/${lang}/news/${article.id.split('/')[1].replace('.md', '')}`}
+      />
+    ))}
+  </div>
+  
+  {sortedNews.length === 0 && (
+    <div class="no-content">
+      <p>No news articles available yet.</p>
+    </div>
+  )}
+</Layout>
+
+<style>
+  .lead {
+    font-size: var(--font-size-lg);
+    color: var(--roma-blue-soft);
+    text-align: center;
+  }
+  
+  .no-content {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--roma-blue-soft);
+  }
+</style>

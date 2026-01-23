@@ -1,0 +1,337 @@
+backend:
+  name: git-gateway
+  branch: main
+
+media_folder: "public/images/uploads"
+public_folder: "/images/uploads"
+
+locale: "en"
+
+collections:
+  # Pages collection - multilingual
+  - name: "pages"
+    label: "Pages"
+    folder: "src/content/pages"
+    create: false
+    delete: false
+    slug: "{{lang}}/{{slug}}"
+    fields:
+      - {label: "Language", name: "lang", widget: "select", options: ["en", "es", "it", "gr"]}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Description", name: "description", widget: "text", required: false}
+      - {label: "Body", name: "body", widget: "markdown"}
+    filter:
+      field: lang
+    files:
+      # English Pages
+      - label: "Home (EN)"
+        name: "home-en"
+        file: "src/content/pages/en/home.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "en"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Tagline", name: "tagline", widget: "string"}
+          - {label: "Description", name: "description", widget: "text"}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "About (EN)"
+        name: "about-en"
+        file: "src/content/pages/en/about.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "en"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Hate Speech (EN)"
+        name: "hate-speech-en"
+        file: "src/content/pages/en/hate-speech.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "en"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Report (EN)"
+        name: "report-en"
+        file: "src/content/pages/en/report.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "en"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "AI Against Hate (EN)"
+        name: "ai-against-hate-en"
+        file: "src/content/pages/en/ai-against-hate.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "en"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "News Page (EN)"
+        name: "news-page-en"
+        file: "src/content/pages/en/news.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "en"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Partners (EN)"
+        name: "partners-en"
+        file: "src/content/pages/en/partners.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "en"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      
+      # Spanish Pages
+      - label: "Home (ES)"
+        name: "home-es"
+        file: "src/content/pages/es/home.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "es"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Tagline", name: "tagline", widget: "string"}
+          - {label: "Description", name: "description", widget: "text"}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "About (ES)"
+        name: "about-es"
+        file: "src/content/pages/es/about.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "es"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Hate Speech (ES)"
+        name: "hate-speech-es"
+        file: "src/content/pages/es/hate-speech.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "es"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Report (ES)"
+        name: "report-es"
+        file: "src/content/pages/es/report.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "es"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "AI Against Hate (ES)"
+        name: "ai-against-hate-es"
+        file: "src/content/pages/es/ai-against-hate.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "es"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "News Page (ES)"
+        name: "news-page-es"
+        file: "src/content/pages/es/news.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "es"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Partners (ES)"
+        name: "partners-es"
+        file: "src/content/pages/es/partners.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "es"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+
+      # Italian Pages
+      - label: "Home (IT)"
+        name: "home-it"
+        file: "src/content/pages/it/home.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "it"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Tagline", name: "tagline", widget: "string"}
+          - {label: "Description", name: "description", widget: "text"}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "About (IT)"
+        name: "about-it"
+        file: "src/content/pages/it/about.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "it"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Hate Speech (IT)"
+        name: "hate-speech-it"
+        file: "src/content/pages/it/hate-speech.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "it"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Report (IT)"
+        name: "report-it"
+        file: "src/content/pages/it/report.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "it"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "AI Against Hate (IT)"
+        name: "ai-against-hate-it"
+        file: "src/content/pages/it/ai-against-hate.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "it"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "News Page (IT)"
+        name: "news-page-it"
+        file: "src/content/pages/it/news.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "it"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Partners (IT)"
+        name: "partners-it"
+        file: "src/content/pages/it/partners.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "it"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+
+      # Greek Pages
+      - label: "Home (GR)"
+        name: "home-gr"
+        file: "src/content/pages/gr/home.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "gr"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Tagline", name: "tagline", widget: "string"}
+          - {label: "Description", name: "description", widget: "text"}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "About (GR)"
+        name: "about-gr"
+        file: "src/content/pages/gr/about.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "gr"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Hate Speech (GR)"
+        name: "hate-speech-gr"
+        file: "src/content/pages/gr/hate-speech.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "gr"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Report (GR)"
+        name: "report-gr"
+        file: "src/content/pages/gr/report.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "gr"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "AI Against Hate (GR)"
+        name: "ai-against-hate-gr"
+        file: "src/content/pages/gr/ai-against-hate.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "gr"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "News Page (GR)"
+        name: "news-page-gr"
+        file: "src/content/pages/gr/news.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "gr"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+      - label: "Partners (GR)"
+        name: "partners-gr"
+        file: "src/content/pages/gr/partners.md"
+        fields:
+          - {label: "Language", name: "lang", widget: "hidden", default: "gr"}
+          - {label: "Title", name: "title", widget: "string"}
+          - {label: "Description", name: "description", widget: "text", required: false}
+          - {label: "Body", name: "body", widget: "markdown"}
+
+  # News articles - multilingual
+  - name: "news_en"
+    label: "News (EN)"
+    folder: "src/content/news/en"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Language", name: "lang", widget: "hidden", default: "en"}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "pubDate", widget: "datetime"}
+      - {label: "Description", name: "description", widget: "text"}
+      - {label: "Category", name: "category", widget: "select", options: ["Project News", "Events & Trainings", "Roundtables", "Calls to Action"]}
+      - {label: "Featured Image", name: "image", widget: "image", required: false}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "news_es"
+    label: "News (ES)"
+    folder: "src/content/news/es"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Language", name: "lang", widget: "hidden", default: "es"}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "pubDate", widget: "datetime"}
+      - {label: "Description", name: "description", widget: "text"}
+      - {label: "Category", name: "category", widget: "select", options: ["Noticias del Proyecto", "Eventos y Formaciones", "Mesas Redondas", "Llamadas a la Acción"]}
+      - {label: "Featured Image", name: "image", widget: "image", required: false}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "news_it"
+    label: "News (IT)"
+    folder: "src/content/news/it"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Language", name: "lang", widget: "hidden", default: "it"}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "pubDate", widget: "datetime"}
+      - {label: "Description", name: "description", widget: "text"}
+      - {label: "Category", name: "category", widget: "select", options: ["Notizie del Progetto", "Eventi e Formazioni", "Tavole Rotonde", "Inviti all'Azione"]}
+      - {label: "Featured Image", name: "image", widget: "image", required: false}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  - name: "news_gr"
+    label: "News (GR)"
+    folder: "src/content/news/gr"
+    create: true
+    slug: "{{year}}-{{month}}-{{day}}-{{slug}}"
+    fields:
+      - {label: "Language", name: "lang", widget: "hidden", default: "gr"}
+      - {label: "Title", name: "title", widget: "string"}
+      - {label: "Publish Date", name: "pubDate", widget: "datetime"}
+      - {label: "Description", name: "description", widget: "text"}
+      - {label: "Category", name: "category", widget: "select", options: ["Νέα Έργου", "Εκδηλώσεις και Εκπαίδευση", "Στρογγυλά Τραπέζια", "Προσκλήσεις Δράσης"]}
+      - {label: "Featured Image", name: "image", widget: "image", required: false}
+      - {label: "Body", name: "body", widget: "markdown"}
+
+  # Partners - with translations
+  - name: "partners"
+    label: "Partners"
+    folder: "src/content/partners"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - {label: "Name", name: "name", widget: "string"}
+      - {label: "Country", name: "country", widget: "string"}
+      - {label: "Logo", name: "logo", widget: "image", required: false}
+      - {label: "Website", name: "website", widget: "string", required: false}
+      - {label: "Description (EN)", name: "description_en", widget: "text"}
+      - {label: "Description (ES)", name: "description_es", widget: "text"}
+      - {label: "Description (IT)", name: "description_it", widget: "text"}
+      - {label: "Description (GR)", name: "description_gr", widget: "text"}
+      - {label: "Body (EN)", name: "body_en", widget: "markdown"}
+      - {label: "Body (ES)", name: "body_es", widget: "markdown"}
+      - {label: "Body (IT)", name: "body_it", widget: "markdown"}
+      - {label: "Body (GR)", name: "body_gr", widget: "markdown"}

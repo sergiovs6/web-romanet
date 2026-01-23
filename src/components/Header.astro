@@ -1,0 +1,226 @@
+---
+interface Props {
+  lang: 'en' | 'es' | 'it' | 'gr';
+}
+
+const { lang } = Astro.props;
+
+const navItems = {
+  en: {
+    home: 'Home',
+    about: 'About RomaNET',
+    hateSpeech: 'About Hate Speech & Hate Crimes',
+    report: 'Report & Get Support',
+    aiAgainstHate: 'AI Against Hate',
+    news: 'News',
+    partners: 'Partners & Network'
+  },
+  es: {
+    home: 'Inicio',
+    about: 'Sobre RomaNET',
+    hateSpeech: 'Sobre Discurso de Odio y Delitos de Odio',
+    report: 'Denunciar y Obtener Apoyo',
+    aiAgainstHate: 'IA Contra el Odio',
+    news: 'Noticias',
+    partners: 'Socios y Red'
+  },
+  it: {
+    home: 'Home',
+    about: 'Chi siamo',
+    hateSpeech: 'Sul Discorso d\'Odio e Crimini d\'Odio',
+    report: 'Segnala e Ottieni Supporto',
+    aiAgainstHate: 'IA Contro l\'Odio',
+    news: 'Notizie',
+    partners: 'Partner e Rete'
+  },
+  gr: {
+    home: 'Αρχική',
+    about: 'Σχετικά με το RomaNET',
+    hateSpeech: 'Σχετικά με τον Λόγο Μίσους και τα Εγκλήματα Μίσους',
+    report: 'Αναφορά και Υποστήριξη',
+    aiAgainstHate: 'Τεχνητή Νοημοσύνη κατά του Μίσους',
+    news: 'Νέα',
+    partners: 'Εταίροι και Δίκτυο'
+  }
+};
+
+const nav = navItems[lang];
+---
+
+<header>
+  <div class="header-container">
+    <div class="logo">
+      <a href={`/${lang}`}>
+        <span class="logo-text">RomaNET</span>
+      </a>
+    </div>
+    
+    <button class="mobile-menu-toggle" aria-label="Toggle menu">
+      <span></span>
+      <span></span>
+      <span></span>
+    </button>
+    
+    <nav class="main-nav">
+      <ul>
+        <li><a href={`/${lang}`}>{nav.home}</a></li>
+        <li><a href={`/${lang}/about`}>{nav.about}</a></li>
+        <li><a href={`/${lang}/hate-speech`}>{nav.hateSpeech}</a></li>
+        <li><a href={`/${lang}/report`}>{nav.report}</a></li>
+        <li><a href={`/${lang}/ai-against-hate`}>{nav.aiAgainstHate}</a></li>
+        <li><a href={`/${lang}/news`}>{nav.news}</a></li>
+        <li><a href={`/${lang}/partners`}>{nav.partners}</a></li>
+      </ul>
+    </nav>
+    
+    <div class="header-actions">
+      <slot name="language-switcher" />
+    </div>
+  </div>
+</header>
+
+<style>
+  header {
+    background-color: var(--roma-blue-dark);
+    color: var(--roma-white);
+    padding: 1rem 0;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+  }
+  
+  .header-container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 0 var(--spacing-md);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--spacing-md);
+  }
+  
+  .logo {
+    flex-shrink: 0;
+  }
+  
+  .logo-text {
+    font-size: 1.75rem;
+    font-weight: 700;
+    color: var(--roma-white);
+    text-decoration: none;
+  }
+  
+  .logo a {
+    color: var(--roma-white);
+    text-decoration: none;
+  }
+  
+  .logo a:hover {
+    color: var(--roma-apricot);
+  }
+  
+  .mobile-menu-toggle {
+    display: none;
+    flex-direction: column;
+    gap: 4px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 8px;
+  }
+  
+  .mobile-menu-toggle span {
+    display: block;
+    width: 25px;
+    height: 3px;
+    background-color: var(--roma-white);
+    transition: all 0.3s;
+  }
+  
+  .main-nav {
+    flex: 1;
+  }
+  
+  .main-nav ul {
+    list-style: none;
+    display: flex;
+    gap: var(--spacing-md);
+    flex-wrap: wrap;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .main-nav a {
+    color: var(--roma-white);
+    text-decoration: none;
+    font-weight: 500;
+    padding: 0.5rem 0;
+    transition: color var(--transition);
+    white-space: nowrap;
+  }
+  
+  .main-nav a:hover {
+    color: var(--roma-apricot);
+  }
+  
+  .header-actions {
+    flex-shrink: 0;
+  }
+  
+  @media (max-width: 1024px) {
+    .main-nav ul {
+      gap: var(--spacing-sm);
+    }
+    
+    .main-nav a {
+      font-size: 0.875rem;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .mobile-menu-toggle {
+      display: flex;
+    }
+    
+    .main-nav {
+      display: none;
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: var(--roma-blue-dark);
+      padding: var(--spacing-md);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+    
+    .main-nav.active {
+      display: block;
+    }
+    
+    .main-nav ul {
+      flex-direction: column;
+      gap: var(--spacing-sm);
+    }
+    
+    .main-nav a {
+      display: block;
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--roma-blue-soft);
+    }
+  }
+</style>
+
+<script>
+  // Mobile menu toggle
+  document.addEventListener('DOMContentLoaded', () => {
+    const toggle = document.querySelector('.mobile-menu-toggle');
+    const nav = document.querySelector('.main-nav');
+    
+    if (toggle && nav) {
+      toggle.addEventListener('click', () => {
+        nav.classList.toggle('active');
+      });
+    }
+  });
+</script>

@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getEntry } from 'astro:content';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'gr' } }
+  ];
+}
+
+const { lang } = Astro.params as { lang: 'en' | 'es' | 'it' | 'gr' };
+
+const aiPage = await getEntry('pages', `${lang}/ai-against-hate`);
+const { Content } = aiPage ? await aiPage.render() : { Content: null };
+---
+
+<Layout 
+  title={aiPage?.data.title || 'AI Against Hate'} 
+  description={aiPage?.data.description}
+  lang={lang}
+>
+  <article class="content">
+    <h1>{aiPage?.data.title || 'AI Against Hate'}</h1>
+    {Content && <Content />}
+  </article>
+</Layout>

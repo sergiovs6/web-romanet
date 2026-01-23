@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getEntry } from 'astro:content';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'gr' } }
+  ];
+}
+
+const { lang } = Astro.params as { lang: 'en' | 'es' | 'it' | 'gr' };
+
+const reportPage = await getEntry('pages', `${lang}/report`);
+const { Content } = reportPage ? await reportPage.render() : { Content: null };
+---
+
+<Layout 
+  title={reportPage?.data.title || 'Report & Get Support'} 
+  description={reportPage?.data.description}
+  lang={lang}
+>
+  <article class="content">
+    <h1>{reportPage?.data.title || 'Report & Get Support'}</h1>
+    {Content && <Content />}
+  </article>
+</Layout>
