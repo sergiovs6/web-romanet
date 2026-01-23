@@ -1,6 +1,6 @@
 ---
 // This page handles the root URL
-// We need to handle Netlify Identity tokens before redirecting to the default language
+// Handles Netlify Identity tokens before redirecting to the default language
 ---
 
 <!doctype html>
@@ -9,7 +9,7 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Redirecting... | RomaNET</title>
-        <!-- Load Netlify Identity Widget ONCE -->
+        <!-- Netlify Identity Widget - will auto-initialize when it detects a token -->
         <script
             is:inline
             src="https://identity.netlify.com/v1/netlify-identity-widget.js"
@@ -34,27 +34,19 @@
                     return;
                 }
 
-                // We have a token - update status
+                // We have a token - update status and let the widget handle it
                 document.getElementById("status").textContent =
                     "Processing invitation...";
 
-                // Wait for netlifyIdentity to be available
-                function initIdentity() {
+                // Wait for netlifyIdentity to be available (it auto-initializes with the token)
+                function setupHandlers() {
                     if (typeof netlifyIdentity === "undefined") {
-                        setTimeout(initIdentity, 100);
+                        setTimeout(setupHandlers, 100);
                         return;
                     }
 
-                    // Initialize with API URL
-                    netlifyIdentity.init({
-                        APIUrl: "https://romanet.netlify.app/.netlify/identity",
-                    });
-
-                    // The widget should auto-detect the token and open
-                    // But let's also explicitly open it after a short delay
-                    setTimeout(function () {
-                        netlifyIdentity.open();
-                    }, 500);
+                    // DO NOT call init() - the widget auto-initializes on its own
+                    // Just set up the event handlers
 
                     // Handle successful login/signup
                     netlifyIdentity.on("login", function (user) {
@@ -85,8 +77,8 @@
                     });
                 }
 
-                // Start the initialization
-                initIdentity();
+                // Start setting up handlers
+                setupHandlers();
             })();
         </script>
     </body>
