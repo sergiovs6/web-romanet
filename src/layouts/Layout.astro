@@ -93,24 +93,47 @@ const langNames = {
 
     <!-- Netlify Identity redirect and invite handling -->
     <script is:inline>
-      if (window.netlifyIdentity) {
-        // Handle invite and recovery tokens
+      // Wait for the Netlify Identity widget to load
+      function initNetlifyIdentity() {
         const hash = window.location.hash;
+
+        // Check if we have any identity tokens in the URL
+        const hasInviteToken = hash.includes("invite_token=");
+        const hasConfirmationToken = hash.includes("confirmation_token=");
+        const hasRecoveryToken = hash.includes("recovery_token=");
+        const hasAccessToken = hash.includes("access_token=");
+
         if (
-          hash &&
-          (hash.includes("invite_token=") ||
-            hash.includes("confirmation_token=") ||
-            hash.includes("recovery_token="))
+          hasInviteToken ||
+          hasConfirmationToken ||
+          hasRecoveryToken ||
+          hasAccessToken
         ) {
-          // Open the identity widget when an invite/recovery token is present
-          window.netlifyIdentity.open();
+          // If we have a token, open the identity widget immediately
+          if (window.netlifyIdentity) {
+            window.netlifyIdentity.open();
+          }
         }
 
-        window.netlifyIdentity.on("init", (user) => {
-          if (!user) {
-            window.netlifyIdentity.on("login", () => {
-              document.location.href = "/admin/";
-            });
+        if (window.netlifyIdentity) {
+          window.netlifyIdentity.on("init", (user) => {
+            if (!user) {
+              window.netlifyIdentity.on("login", () => {
+                document.location.href = "/admin/";
+              });
+            }
+          });
+        }
+      }
+
+      // Check if netlifyIdentity is already loaded
+      if (window.netlifyIdentity) {
+        initNetlifyIdentity();
+      } else {
+        // Wait for the script to load
+        window.addEventListener("load", function () {
+          if (window.netlifyIdentity) {
+            initNetlifyIdentity();
           }
         });
       }

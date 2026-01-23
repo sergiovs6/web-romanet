@@ -9,9 +9,6 @@
 [context.production]
   command = "npm run build"
 
-# Redirect only for SPA fallback if needed, but exclude admin and identity paths
-# For Astro static sites, we generally don't need SPA redirects
-
 # Ensure proper MIME types and headers
 [[headers]]
   for = "/*"
