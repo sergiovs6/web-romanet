@@ -19,10 +19,15 @@ export async function getStaticPaths() {
 const { article } = Astro.props;
 const { Content } = await article.render();
 
-// Format date
-const formattedDate = article.data.pubDate.toLocaleDateString(article.data.lang === 'en' ? 'en-US' : 
-  article.data.lang === 'es' ? 'es-ES' : 
-  article.data.lang === 'it' ? 'it-IT' : 'el-GR', {
+// Format date with locale mapping
+const localeMap = {
+  en: 'en-US',
+  es: 'es-ES',
+  it: 'it-IT',
+  gr: 'el-GR'
+};
+
+const formattedDate = article.data.pubDate.toLocaleDateString(localeMap[article.data.lang], {
   year: 'numeric',
   month: 'long',
   day: 'numeric'

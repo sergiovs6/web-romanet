@@ -37,7 +37,8 @@ const allPartners = await getCollection('partners');
   
   <div class="grid grid-2">
     {allPartners.map((partner) => {
-      const description = partner.data[`description_${lang}` as keyof typeof partner.data] as string;
+      const descriptionKey = `description_${lang}` as keyof typeof partner.data;
+      const description = (partner.data[descriptionKey] as string) || '';
       
       return (
         <Card title={partner.data.name}>

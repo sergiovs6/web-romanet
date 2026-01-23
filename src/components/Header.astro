@@ -9,7 +9,7 @@ const navItems = {
   en: {
     home: 'Home',
     about: 'About RomaNET',
-    hateSpech: 'About Hate Speech & Hate Crimes',
+    hateSpeech: 'About Hate Speech & Hate Crimes',
     report: 'Report & Get Support',
     aiAgainstHate: 'AI Against Hate',
     news: 'News',
@@ -18,7 +18,7 @@ const navItems = {
   es: {
     home: 'Inicio',
     about: 'Sobre RomaNET',
-    hateSpech: 'Sobre Discurso de Odio y Delitos de Odio',
+    hateSpeech: 'Sobre Discurso de Odio y Delitos de Odio',
     report: 'Denunciar y Obtener Apoyo',
     aiAgainstHate: 'IA Contra el Odio',
     news: 'Noticias',
@@ -26,8 +26,8 @@ const navItems = {
   },
   it: {
     home: 'Home',
-    about: 'Su RomaNET',
-    hateSpech: 'Sul Discorso d\'Odio e Crimini d\'Odio',
+    about: 'Chi siamo',
+    hateSpeech: 'Sul Discorso d\'Odio e Crimini d\'Odio',
     report: 'Segnala e Ottieni Supporto',
     aiAgainstHate: 'IA Contro l\'Odio',
     news: 'Notizie',
@@ -36,7 +36,7 @@ const navItems = {
   gr: {
     home: 'Αρχική',
     about: 'Σχετικά με το RomaNET',
-    hateSpech: 'Σχετικά με τον Λόγο Μίσους και τα Εγκλήματα Μίσους',
+    hateSpeech: 'Σχετικά με τον Λόγο Μίσους και τα Εγκλήματα Μίσους',
     report: 'Αναφορά και Υποστήριξη',
     aiAgainstHate: 'Τεχνητή Νοημοσύνη κατά του Μίσους',
     news: 'Νέα',
@@ -65,7 +65,7 @@ const nav = navItems[lang];
       <ul>
         <li><a href={`/${lang}`}>{nav.home}</a></li>
         <li><a href={`/${lang}/about`}>{nav.about}</a></li>
-        <li><a href={`/${lang}/hate-speech`}>{nav.hateSpech}</a></li>
+        <li><a href={`/${lang}/hate-speech`}>{nav.hateSpeech}</a></li>
         <li><a href={`/${lang}/report`}>{nav.report}</a></li>
         <li><a href={`/${lang}/ai-against-hate`}>{nav.aiAgainstHate}</a></li>
         <li><a href={`/${lang}/news`}>{nav.news}</a></li>
