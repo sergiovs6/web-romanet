@@ -10,13 +10,15 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Redirecting... | RomaNET</title>
         <!-- Load Netlify Identity Widget ONCE -->
-        <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+        <script
+            is:inline
+            src="https://identity.netlify.com/v1/netlify-identity-widget.js"
         ></script>
     </head>
     <body>
         <p id="status">Loading...</p>
 
-        <script>
+        <script is:inline>
             (function () {
                 var hash = window.location.hash;
                 var hasIdentityToken =
