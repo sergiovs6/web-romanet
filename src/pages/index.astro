@@ -1,4 +1,71 @@
 ---
-// Redirect to default language (English)
-return Astro.redirect('/en');
+// This page handles the root URL
+// We need to handle Netlify Identity tokens before redirecting to the default language
 ---
+
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Redirecting... | RomaNET</title>
+        <!-- Netlify Identity Widget - MUST load before any redirect -->
+        <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+        ></script>
+    </head>
+    <body>
+        <p>Redirecting...</p>
+
+        <script>
+            (function () {
+                const hash = window.location.hash;
+
+                // Check if we have any Netlify Identity tokens in the URL
+                const hasIdentityToken =
+                    hash &&
+                    (hash.includes("invite_token=") ||
+                        hash.includes("confirmation_token=") ||
+                        hash.includes("recovery_token=") ||
+                        hash.includes("access_token="));
+
+                if (hasIdentityToken) {
+                    // If we have a token, wait for the Identity widget to load and handle it
+                    function handleIdentityToken() {
+                        if (window.netlifyIdentity) {
+                            // Open the identity widget to process the token
+                            window.netlifyIdentity.open();
+
+                            // After login, redirect to admin
+                            window.netlifyIdentity.on("login", function () {
+                                window.location.href = "/admin/";
+                            });
+
+                            // If they close without completing, redirect to default language
+                            window.netlifyIdentity.on("close", function () {
+                                // Small delay to check if they logged in
+                                setTimeout(function () {
+                                    if (!window.netlifyIdentity.currentUser()) {
+                                        window.location.href = "/en/";
+                                    }
+                                }, 100);
+                            });
+                        } else {
+                            // Widget not loaded yet, try again
+                            setTimeout(handleIdentityToken, 50);
+                        }
+                    }
+
+                    // Start checking for the widget
+                    if (document.readyState === "complete") {
+                        handleIdentityToken();
+                    } else {
+                        window.addEventListener("load", handleIdentityToken);
+                    }
+                } else {
+                    // No identity token, redirect to default language immediately
+                    window.location.href = "/en/";
+                }
+            })();
+        </script>
+    </body>
+</html>
