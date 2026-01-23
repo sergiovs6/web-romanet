@@ -9,99 +9,83 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Redirecting... | RomaNET</title>
+        <!-- Load Netlify Identity Widget ONCE -->
+        <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
+        ></script>
     </head>
     <body>
         <p id="status">Loading...</p>
 
-        <!-- Netlify Identity Widget - loaded with explicit onload handler -->
         <script>
-            // Check for identity tokens BEFORE loading the widget
-            var hash = window.location.hash;
-            var hasIdentityToken =
-                hash &&
-                (hash.indexOf("invite_token=") !== -1 ||
-                    hash.indexOf("confirmation_token=") !== -1 ||
-                    hash.indexOf("recovery_token=") !== -1 ||
-                    hash.indexOf("access_token=") !== -1);
+            (function () {
+                var hash = window.location.hash;
+                var hasIdentityToken =
+                    hash &&
+                    (hash.indexOf("invite_token=") !== -1 ||
+                        hash.indexOf("confirmation_token=") !== -1 ||
+                        hash.indexOf("recovery_token=") !== -1 ||
+                        hash.indexOf("access_token=") !== -1);
 
-            if (!hasIdentityToken) {
-                // No token, redirect immediately without loading the widget
-                window.location.replace("/en/");
-            } else {
-                // We have a token, update status and load the widget
+                if (!hasIdentityToken) {
+                    // No token, redirect immediately
+                    window.location.replace("/en/");
+                    return;
+                }
+
+                // We have a token - update status
                 document.getElementById("status").textContent =
                     "Processing invitation...";
-            }
-        </script>
 
-        <script>
-            // Only load and initialize the widget if we have a token
-            if (
-                window.location.hash &&
-                (window.location.hash.indexOf("invite_token=") !== -1 ||
-                    window.location.hash.indexOf("confirmation_token=") !==
-                        -1 ||
-                    window.location.hash.indexOf("recovery_token=") !== -1 ||
-                    window.location.hash.indexOf("access_token=") !== -1)
-            ) {
-                // Dynamically load the Netlify Identity widget
-                var script = document.createElement("script");
-                script.src =
-                    "https://identity.netlify.com/v1/netlify-identity-widget.js";
-                script.onload = function () {
-                    // Widget loaded, now initialize and open it
-                    if (typeof netlifyIdentity !== "undefined") {
-                        netlifyIdentity.init({
-                            APIUrl: "https://romanet.netlify.app/.netlify/identity",
-                        });
-
-                        // Open the widget to handle the token
-                        netlifyIdentity.open();
-
-                        // Handle successful login
-                        netlifyIdentity.on("login", function (user) {
-                            document.getElementById("status").textContent =
-                                "Login successful! Redirecting...";
-                            setTimeout(function () {
-                                window.location.href = "/admin/";
-                            }, 500);
-                        });
-
-                        // Handle close without login
-                        netlifyIdentity.on("close", function () {
-                            setTimeout(function () {
-                                var user = netlifyIdentity.currentUser();
-                                if (!user) {
-                                    document.getElementById(
-                                        "status",
-                                    ).textContent =
-                                        "Redirecting to homepage...";
-                                    window.location.href = "/en/";
-                                }
-                            }, 200);
-                        });
-
-                        // Handle errors
-                        netlifyIdentity.on("error", function (err) {
-                            document.getElementById("status").textContent =
-                                "Error: " + err.message;
-                            console.error("Netlify Identity error:", err);
-                        });
-                    } else {
-                        document.getElementById("status").textContent =
-                            "Error loading identity widget";
-                        console.error(
-                            "netlifyIdentity not defined after script load",
-                        );
+                // Wait for netlifyIdentity to be available
+                function initIdentity() {
+                    if (typeof netlifyIdentity === "undefined") {
+                        setTimeout(initIdentity, 100);
+                        return;
                     }
-                };
-                script.onerror = function () {
-                    document.getElementById("status").textContent =
-                        "Error loading identity widget";
-                    console.error("Failed to load Netlify Identity script");
-                };
-                document.head.appendChild(script);
-            }
+
+                    // Initialize with API URL
+                    netlifyIdentity.init({
+                        APIUrl: "https://romanet.netlify.app/.netlify/identity",
+                    });
+
+                    // The widget should auto-detect the token and open
+                    // But let's also explicitly open it after a short delay
+                    setTimeout(function () {
+                        netlifyIdentity.open();
+                    }, 500);
+
+                    // Handle successful login/signup
+                    netlifyIdentity.on("login", function (user) {
+                        document.getElementById("status").textContent =
+                            "Success! Redirecting to admin...";
+                        setTimeout(function () {
+                            window.location.href = "/admin/";
+                        }, 500);
+                    });
+
+                    // Handle close without login
+                    netlifyIdentity.on("close", function () {
+                        setTimeout(function () {
+                            var user = netlifyIdentity.currentUser();
+                            if (!user) {
+                                document.getElementById("status").textContent =
+                                    "Redirecting to homepage...";
+                                window.location.href = "/en/";
+                            }
+                        }, 300);
+                    });
+
+                    // Handle errors
+                    netlifyIdentity.on("error", function (err) {
+                        document.getElementById("status").textContent =
+                            "Error: " + err.message;
+                        console.error("Netlify Identity error:", err);
+                    });
+                }
+
+                // Start the initialization
+                initIdentity();
+            })();
         </script>
     </body>
 </html>
