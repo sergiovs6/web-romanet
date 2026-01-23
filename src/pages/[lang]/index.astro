@@ -1,0 +1,118 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Card from '../../components/Card.astro';
+import { getEntry } from 'astro:content';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'gr' } }
+  ];
+}
+
+const { lang } = Astro.params as { lang: 'en' | 'es' | 'it' | 'gr' };
+
+// Get the home page content
+const homePage = await getEntry('pages', `${lang}/home`);
+const { Content } = homePage ? await homePage.render() : { Content: null };
+
+// Translations for CTA buttons
+const translations = {
+  en: {
+    cta1: 'Know Your Rights',
+    cta2: 'Report Hate Speech',
+    cta3: 'Explore Counter-Narratives',
+    latestNews: 'Latest News'
+  },
+  es: {
+    cta1: 'Conoce Tus Derechos',
+    cta2: 'Denunciar Discurso de Odio',
+    cta3: 'Explorar Contra-Narrativas',
+    latestNews: 'Últimas Noticias'
+  },
+  it: {
+    cta1: 'Conosci i Tuoi Diritti',
+    cta2: 'Segnala Discorsi d\'Odio',
+    cta3: 'Esplora Contro-Narrative',
+    latestNews: 'Ultime Notizie'
+  },
+  gr: {
+    cta1: 'Γνωρίστε τα Δικαιώματά σας',
+    cta2: 'Αναφέρετε Λόγο Μίσους',
+    cta3: 'Εξερευνήστε Αντι-Αφηγήσεις',
+    latestNews: 'Τελευταία Νέα'
+  }
+};
+
+const t = translations[lang];
+---
+
+<Layout 
+  title={homePage?.data.title || 'Home'} 
+  description={homePage?.data.description || 'RomaNET is a European project created to fight hate speech and hate crimes against Roma communities'}
+  lang={lang}
+>
+  <div class="hero">
+    <h1>{homePage?.data.tagline || 'We Stand United Against Discrimination'}</h1>
+    <p>
+      {homePage?.data.description || 'RomaNET is a European project created to fight hate speech and hate crimes against Roma communities, encompassing AI in the creation of positive counter narratives'}
+    </p>
+    
+    <div class="hero-cta">
+      <a href={`/${lang}/report`} class="btn btn-primary">{t.cta1}</a>
+      <a href={`/${lang}/report`} class="btn btn-accent">{t.cta2}</a>
+      <a href={`/${lang}/ai-against-hate`} class="btn">{t.cta3}</a>
+    </div>
+  </div>
+  
+  {Content && (
+    <div class="content">
+      <Content />
+    </div>
+  )}
+  
+  <section class="latest-news">
+    <h2>{t.latestNews}</h2>
+    <div class="grid grid-3">
+      <Card
+        title="Project Launch"
+        description="RomaNET officially launches its mission to combat hate speech against Roma communities"
+        link={`/${lang}/news`}
+        category="Project News"
+      />
+      <Card
+        title="Training Program"
+        description="Join our upcoming training sessions on identifying and reporting hate speech"
+        link={`/${lang}/news`}
+        category="Events & Trainings"
+      />
+      <Card
+        title="AI Innovation"
+        description="Discover how artificial intelligence is being used to create positive counter-narratives"
+        link={`/${lang}/ai-against-hate`}
+        category="AI Against Hate"
+      />
+    </div>
+  </section>
+</Layout>
+
+<style>
+  .hero-cta {
+    display: flex;
+    gap: var(--spacing-md);
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: var(--spacing-lg);
+  }
+  
+  .latest-news {
+    margin-top: var(--spacing-xl);
+  }
+  
+  .latest-news h2 {
+    text-align: center;
+    margin-bottom: var(--spacing-lg);
+  }
+</style>

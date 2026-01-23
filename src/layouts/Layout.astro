@@ -1,0 +1,81 @@
+---
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import LanguageSwitcher from '../components/LanguageSwitcher.astro';
+import '../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string;
+  lang: 'en' | 'es' | 'it' | 'gr';
+}
+
+const { title, description, lang } = Astro.props;
+const currentPath = Astro.url.pathname;
+
+// Language-specific meta tags
+const langNames = {
+  en: 'English',
+  es: 'Español',
+  it: 'Italiano',
+  gr: 'Ελληνικά'
+};
+---
+
+<!DOCTYPE html>
+<html lang={lang}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="generator" content={Astro.generator} />
+    
+    <title>{title} | RomaNET</title>
+    
+    {description && <meta name="description" content={description} />}
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content={`${title} | RomaNET`} />
+    {description && <meta property="og:description" content={description} />}
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:title" content={`${title} | RomaNET`} />
+    {description && <meta property="twitter:description" content={description} />}
+    
+    <!-- Language alternates -->
+    <link rel="alternate" hreflang="en" href={currentPath.replace(/\/(en|es|it|gr)/, '/en')} />
+    <link rel="alternate" hreflang="es" href={currentPath.replace(/\/(en|es|it|gr)/, '/es')} />
+    <link rel="alternate" hreflang="it" href={currentPath.replace(/\/(en|es|it|gr)/, '/it')} />
+    <link rel="alternate" hreflang="gr" href={currentPath.replace(/\/(en|es|it|gr)/, '/gr')} />
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    
+    <!-- Netlify Identity Widget -->
+    <script is:inline src="https://identity.netlify.com/v1/netlify-identity-widget.js"></script>
+  </head>
+  <body>
+    <Header lang={lang}>
+      <LanguageSwitcher slot="language-switcher" currentLang={lang} currentPath={currentPath} />
+    </Header>
+    
+    <main>
+      <slot />
+    </main>
+    
+    <Footer lang={lang} />
+    
+    <!-- Netlify Identity redirect -->
+    <script is:inline>
+      if (window.netlifyIdentity) {
+        window.netlifyIdentity.on("init", user => {
+          if (!user) {
+            window.netlifyIdentity.on("login", () => {
+              document.location.href = "/admin/";
+            });
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

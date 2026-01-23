@@ -1,0 +1,29 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { getEntry } from 'astro:content';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'gr' } }
+  ];
+}
+
+const { lang } = Astro.params as { lang: 'en' | 'es' | 'it' | 'gr' };
+
+const aboutPage = await getEntry('pages', `${lang}/about`);
+const { Content } = aboutPage ? await aboutPage.render() : { Content: null };
+---
+
+<Layout 
+  title={aboutPage?.data.title || 'About RomaNET'} 
+  description={aboutPage?.data.description}
+  lang={lang}
+>
+  <article class="content">
+    <h1>{aboutPage?.data.title || 'About RomaNET'}</h1>
+    {Content && <Content />}
+  </article>
+</Layout>

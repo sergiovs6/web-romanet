@@ -1,0 +1,133 @@
+---
+import Layout from '../../../layouts/Layout.astro';
+import { getCollection } from 'astro:content';
+
+export async function getStaticPaths() {
+  const allNews = await getCollection('news');
+  
+  return allNews.map((article) => {
+    const [lang, ...slugParts] = article.id.split('/');
+    const slug = slugParts.join('/').replace('.md', '');
+    
+    return {
+      params: { lang, slug },
+      props: { article }
+    };
+  });
+}
+
+const { article } = Astro.props;
+const { Content } = await article.render();
+
+// Format date
+const formattedDate = article.data.pubDate.toLocaleDateString(article.data.lang === 'en' ? 'en-US' : 
+  article.data.lang === 'es' ? 'es-ES' : 
+  article.data.lang === 'it' ? 'it-IT' : 'el-GR', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+---
+
+<Layout 
+  title={article.data.title} 
+  description={article.data.description}
+  lang={article.data.lang}
+>
+  <article class="article">
+    {article.data.image && (
+      <div class="article-image">
+        <img src={article.data.image} alt={article.data.title} />
+      </div>
+    )}
+    
+    <div class="article-header">
+      <span class="article-category">{article.data.category}</span>
+      <h1>{article.data.title}</h1>
+      <div class="article-meta">
+        <time datetime={article.data.pubDate.toISOString()}>
+          {formattedDate}
+        </time>
+        {article.data.author && (
+          <span class="article-author">by {article.data.author}</span>
+        )}
+      </div>
+    </div>
+    
+    <div class="content article-content">
+      <Content />
+    </div>
+    
+    <div class="article-footer">
+      <a href={`/${article.data.lang}/news`} class="btn">
+        ← Back to News
+      </a>
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .article {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .article-image {
+    width: 100%;
+    height: 400px;
+    overflow: hidden;
+    border-radius: var(--border-radius);
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .article-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  
+  .article-header {
+    margin-bottom: var(--spacing-lg);
+  }
+  
+  .article-category {
+    display: inline-block;
+    padding: 0.25rem 0.75rem;
+    background-color: var(--roma-red);
+    color: var(--roma-white);
+    font-size: var(--font-size-sm);
+    font-weight: 600;
+    border-radius: calc(var(--border-radius) / 2);
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .article-header h1 {
+    margin-bottom: var(--spacing-sm);
+  }
+  
+  .article-meta {
+    display: flex;
+    gap: var(--spacing-md);
+    color: var(--roma-blue-soft);
+    font-size: var(--font-size-sm);
+  }
+  
+  .article-author {
+    font-style: italic;
+  }
+  
+  .article-content {
+    margin-bottom: var(--spacing-xl);
+  }
+  
+  .article-footer {
+    padding-top: var(--spacing-lg);
+    border-top: 2px solid var(--roma-offwhite);
+  }
+  
+  @media (max-width: 768px) {
+    .article-image {
+      height: 250px;
+    }
+  }
+</style>

@@ -1,0 +1,101 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Card from '../../components/Card.astro';
+import { getCollection, getEntry } from 'astro:content';
+
+export function getStaticPaths() {
+  return [
+    { params: { lang: 'en' } },
+    { params: { lang: 'es' } },
+    { params: { lang: 'it' } },
+    { params: { lang: 'gr' } }
+  ];
+}
+
+const { lang } = Astro.params as { lang: 'en' | 'es' | 'it' | 'gr' };
+
+// Get partners page content
+const partnersPage = await getEntry('pages', `${lang}/partners`);
+const { Content: PageContent } = partnersPage ? await partnersPage.render() : { Content: null };
+
+// Get all partners
+const allPartners = await getCollection('partners');
+---
+
+<Layout 
+  title={partnersPage?.data.title || 'Partners & Network'} 
+  description={partnersPage?.data.description}
+  lang={lang}
+>
+  <h1>{partnersPage?.data.title || 'Partners & Network'}</h1>
+  
+  {PageContent && (
+    <div class="content mb-lg">
+      <PageContent />
+    </div>
+  )}
+  
+  <div class="grid grid-2">
+    {allPartners.map((partner) => {
+      const description = partner.data[`description_${lang}` as keyof typeof partner.data] as string;
+      
+      return (
+        <Card title={partner.data.name}>
+          <div class="partner-info">
+            <p class="partner-country">
+              <strong>Country:</strong> {partner.data.country}
+            </p>
+            {partner.data.website && (
+              <p class="partner-website">
+                <a href={partner.data.website} target="_blank" rel="noopener noreferrer">
+                  Visit Website →
+                </a>
+              </p>
+            )}
+            <p class="partner-description">{description}</p>
+          </div>
+        </Card>
+      );
+    })}
+  </div>
+  
+  {allPartners.length === 0 && (
+    <div class="no-content">
+      <p>Partner information coming soon.</p>
+    </div>
+  )}
+</Layout>
+
+<style>
+  .partner-info {
+    display: flex;
+    flex-direction: column;
+    gap: var(--spacing-sm);
+  }
+  
+  .partner-country {
+    color: var(--roma-blue-soft);
+    font-size: var(--font-size-sm);
+  }
+  
+  .partner-website a {
+    color: var(--roma-red);
+    font-weight: 600;
+    text-decoration: none;
+  }
+  
+  .partner-website a:hover {
+    color: var(--roma-pink);
+  }
+  
+  .partner-description {
+    color: var(--color-text);
+    line-height: 1.6;
+  }
+  
+  .no-content {
+    text-align: center;
+    padding: var(--spacing-xl);
+    color: var(--roma-blue-soft);
+  }
+</style>
