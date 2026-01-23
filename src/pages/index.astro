@@ -9,63 +9,99 @@
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Redirecting... | RomaNET</title>
-        <!-- Netlify Identity Widget - MUST load before any redirect -->
-        <script src="https://identity.netlify.com/v1/netlify-identity-widget.js"
-        ></script>
     </head>
     <body>
-        <p>Redirecting...</p>
+        <p id="status">Loading...</p>
+
+        <!-- Netlify Identity Widget - loaded with explicit onload handler -->
+        <script>
+            // Check for identity tokens BEFORE loading the widget
+            var hash = window.location.hash;
+            var hasIdentityToken =
+                hash &&
+                (hash.indexOf("invite_token=") !== -1 ||
+                    hash.indexOf("confirmation_token=") !== -1 ||
+                    hash.indexOf("recovery_token=") !== -1 ||
+                    hash.indexOf("access_token=") !== -1);
+
+            if (!hasIdentityToken) {
+                // No token, redirect immediately without loading the widget
+                window.location.replace("/en/");
+            } else {
+                // We have a token, update status and load the widget
+                document.getElementById("status").textContent =
+                    "Processing invitation...";
+            }
+        </script>
 
         <script>
-            (function () {
-                const hash = window.location.hash;
+            // Only load and initialize the widget if we have a token
+            if (
+                window.location.hash &&
+                (window.location.hash.indexOf("invite_token=") !== -1 ||
+                    window.location.hash.indexOf("confirmation_token=") !==
+                        -1 ||
+                    window.location.hash.indexOf("recovery_token=") !== -1 ||
+                    window.location.hash.indexOf("access_token=") !== -1)
+            ) {
+                // Dynamically load the Netlify Identity widget
+                var script = document.createElement("script");
+                script.src =
+                    "https://identity.netlify.com/v1/netlify-identity-widget.js";
+                script.onload = function () {
+                    // Widget loaded, now initialize and open it
+                    if (typeof netlifyIdentity !== "undefined") {
+                        netlifyIdentity.init({
+                            APIUrl: "https://romanet.netlify.app/.netlify/identity",
+                        });
 
-                // Check if we have any Netlify Identity tokens in the URL
-                const hasIdentityToken =
-                    hash &&
-                    (hash.includes("invite_token=") ||
-                        hash.includes("confirmation_token=") ||
-                        hash.includes("recovery_token=") ||
-                        hash.includes("access_token="));
+                        // Open the widget to handle the token
+                        netlifyIdentity.open();
 
-                if (hasIdentityToken) {
-                    // If we have a token, wait for the Identity widget to load and handle it
-                    function handleIdentityToken() {
-                        if (window.netlifyIdentity) {
-                            // Open the identity widget to process the token
-                            window.netlifyIdentity.open();
-
-                            // After login, redirect to admin
-                            window.netlifyIdentity.on("login", function () {
+                        // Handle successful login
+                        netlifyIdentity.on("login", function (user) {
+                            document.getElementById("status").textContent =
+                                "Login successful! Redirecting...";
+                            setTimeout(function () {
                                 window.location.href = "/admin/";
-                            });
+                            }, 500);
+                        });
 
-                            // If they close without completing, redirect to default language
-                            window.netlifyIdentity.on("close", function () {
-                                // Small delay to check if they logged in
-                                setTimeout(function () {
-                                    if (!window.netlifyIdentity.currentUser()) {
-                                        window.location.href = "/en/";
-                                    }
-                                }, 100);
-                            });
-                        } else {
-                            // Widget not loaded yet, try again
-                            setTimeout(handleIdentityToken, 50);
-                        }
-                    }
+                        // Handle close without login
+                        netlifyIdentity.on("close", function () {
+                            setTimeout(function () {
+                                var user = netlifyIdentity.currentUser();
+                                if (!user) {
+                                    document.getElementById(
+                                        "status",
+                                    ).textContent =
+                                        "Redirecting to homepage...";
+                                    window.location.href = "/en/";
+                                }
+                            }, 200);
+                        });
 
-                    // Start checking for the widget
-                    if (document.readyState === "complete") {
-                        handleIdentityToken();
+                        // Handle errors
+                        netlifyIdentity.on("error", function (err) {
+                            document.getElementById("status").textContent =
+                                "Error: " + err.message;
+                            console.error("Netlify Identity error:", err);
+                        });
                     } else {
-                        window.addEventListener("load", handleIdentityToken);
+                        document.getElementById("status").textContent =
+                            "Error loading identity widget";
+                        console.error(
+                            "netlifyIdentity not defined after script load",
+                        );
                     }
-                } else {
-                    // No identity token, redirect to default language immediately
-                    window.location.href = "/en/";
-                }
-            })();
+                };
+                script.onerror = function () {
+                    document.getElementById("status").textContent =
+                        "Error loading identity widget";
+                    console.error("Failed to load Netlify Identity script");
+                };
+                document.head.appendChild(script);
+            }
         </script>
     </body>
 </html>
