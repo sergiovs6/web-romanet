@@ -2,7 +2,9 @@
 lang: en
 title: Welcome to RomaNET
 tagline: We Stand United Against Discrimination
-description: RomaNET is a European project created to fight hate speech and hate crimes against Roma communities, encompassing AI in the creation of positive counter narratives
+description: RomaNET is a European project created to fight hate speech and hate
+  crimes against Roma communities, encompassing AI in the creation of positive
+  counter narratives
 ---
 
 ## Our Mission
@@ -19,6 +21,6 @@ RomaNET is a groundbreaking European initiative dedicated to combating hate spee
 
 ## Get Involved
 
-Whether you're experiencing discrimination, want to learn more about your rights, or wish to contribute to the fight against hate speech, RomaNET provides the tools and community to make a difference.
+If you're experiencing discrimination, want to learn more about your rights, or wish to contribute to the fight against hate speech, RomaNET provides the tools and community to make a difference.
 
 Join us in creating a more inclusive and respectful society for all.
