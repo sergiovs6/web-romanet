@@ -2,9 +2,8 @@ backend:
   name: github
   repo: sergiovs6/web-romanet
   branch: main
-  base_url: https://api.netlify.com
-  auth_endpoint: auth
-  site_domain: romanet.netlify.app
+  auth_type: pkce
+  app_id: Ov23liIrVb6d31F0mhcU
 
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
