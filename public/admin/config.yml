@@ -2,8 +2,7 @@ backend:
   name: github
   repo: sergiovs6/web-romanet
   branch: main
-  auth_type: pkce
-  app_id: Ov23liIrVb6d31F0mhcU
+  base_url: https://romanet-oauth.sergiovillarserrano10.workers.dev
 
 media_folder: "public/images/uploads"
 public_folder: "/images/uploads"
