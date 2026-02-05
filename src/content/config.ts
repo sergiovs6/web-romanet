@@ -16,6 +16,7 @@ const newsCollection = defineCollection({
   type: 'content',
   schema: z.object({
     lang: z.enum(['en', 'es', 'it', 'gr']),
+    translationId: z.string().optional(),
     title: z.string(),
     pubDate: z.date(),
     description: z.string(),

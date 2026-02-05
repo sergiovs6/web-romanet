@@ -1,5 +1,6 @@
 ---
 lang: en
+translationId: project-launch-2025
 title: RomaNET Project Officially Launches
 pubDate: 2025-01-20
 description: The RomaNET project kicks off its mission to combat hate speech against Roma communities using innovative AI technology

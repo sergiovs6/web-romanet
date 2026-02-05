@@ -1,16 +1,16 @@
 ---
 interface Props {
-  currentLang: 'en' | 'es' | 'it' | 'gr';
+  currentLang: "en" | "es" | "it" | "gr";
   currentPath?: string;
 }
 
-const { currentLang, currentPath = '' } = Astro.props;
+const { currentLang, currentPath = "" } = Astro.props;
 
 const languages = [
-  { code: 'en', name: 'English', flag: '🇬🇧' },
-  { code: 'es', name: 'Español', flag: '🇪🇸' },
-  { code: 'it', name: 'Italiano', flag: '🇮🇹' },
-  { code: 'gr', name: 'Ελληνικά', flag: '🇬🇷' }
+  { code: "en", name: "English", flag: "🇬🇧" },
+  { code: "es", name: "Español", flag: "🇪🇸" },
+  { code: "it", name: "Italiano", flag: "🇮🇹" },
+  { code: "gr", name: "Ελληνικά", flag: "🇬🇷" },
 ];
 
 // Generate URL for language switch - replace the language code in the path
@@ -18,16 +18,22 @@ const getLanguageUrl = (langCode: string) => {
   if (!currentPath) {
     return `/${langCode}`;
   }
-  
+
   // Remove leading slash and split path
-  const pathParts = currentPath.replace(/^\//, '').split('/');
-  
-  // Replace first part (current language) with new language
-  if (pathParts.length > 0 && ['en', 'es', 'it', 'gr'].includes(pathParts[0])) {
-    pathParts[0] = langCode;
-    return `/${pathParts.join('/')}`;
+  const pathParts = currentPath.replace(/^\//, "").split("/");
+
+  // Check if we're on a specific news article page (e.g., /es/news/some-article)
+  // Not all articles exist in all languages, so redirect to news list to avoid 404
+  if (pathParts.length > 2 && pathParts[1] === "news") {
+    return `/${langCode}/news`;
   }
-  
+
+  // Replace first part (current language) with new language
+  if (pathParts.length > 0 && ["en", "es", "it", "gr"].includes(pathParts[0])) {
+    pathParts[0] = langCode;
+    return `/${pathParts.join("/")}`;
+  }
+
   // If no language in path, prepend new language
   return `/${langCode}/${currentPath}`;
 };
@@ -36,25 +42,27 @@ const getLanguageUrl = (langCode: string) => {
 <div class="language-switcher">
   <button class="language-button" aria-label="Select language">
     <span class="current-lang">
-      {languages.find(l => l.code === currentLang)?.flag}
+      {languages.find((l) => l.code === currentLang)?.flag}
       <span class="lang-code">{currentLang.toUpperCase()}</span>
     </span>
     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-      <path d="M8 11L3 6h10l-5 5z"/>
+      <path d="M8 11L3 6h10l-5 5z"></path>
     </svg>
   </button>
-  
+
   <div class="language-dropdown">
-    {languages.map(lang => (
-      <a 
-        href={getLanguageUrl(lang.code)}
-        class={`language-option ${lang.code === currentLang ? 'active' : ''}`}
-        aria-current={lang.code === currentLang ? 'page' : undefined}
-      >
-        <span class="flag">{lang.flag}</span>
-        <span class="lang-name">{lang.name}</span>
-      </a>
-    ))}
+    {
+      languages.map((lang) => (
+        <a
+          href={getLanguageUrl(lang.code)}
+          class={`language-option ${lang.code === currentLang ? "active" : ""}`}
+          aria-current={lang.code === currentLang ? "page" : undefined}
+        >
+          <span class="flag">{lang.flag}</span>
+          <span class="lang-name">{lang.name}</span>
+        </a>
+      ))
+    }
   </div>
 </div>
 
@@ -62,7 +70,7 @@ const getLanguageUrl = (langCode: string) => {
   .language-switcher {
     position: relative;
   }
-  
+
   .language-button {
     display: flex;
     align-items: center;
@@ -77,21 +85,21 @@ const getLanguageUrl = (langCode: string) => {
     cursor: pointer;
     transition: all var(--transition);
   }
-  
+
   .language-button:hover {
     background-color: rgba(255, 255, 255, 0.1);
   }
-  
+
   .current-lang {
     display: flex;
     align-items: center;
     gap: 0.5rem;
   }
-  
+
   .lang-code {
     text-transform: uppercase;
   }
-  
+
   .language-dropdown {
     position: absolute;
     top: calc(100% + 0.5rem);
@@ -106,14 +114,14 @@ const getLanguageUrl = (langCode: string) => {
     transition: all var(--transition);
     z-index: 100;
   }
-  
+
   .language-switcher:hover .language-dropdown,
   .language-switcher:focus-within .language-dropdown {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
   }
-  
+
   .language-option {
     display: flex;
     align-items: center;
@@ -123,38 +131,38 @@ const getLanguageUrl = (langCode: string) => {
     text-decoration: none;
     transition: background-color var(--transition);
   }
-  
+
   .language-option:first-child {
     border-radius: var(--border-radius) var(--border-radius) 0 0;
   }
-  
+
   .language-option:last-child {
     border-radius: 0 0 var(--border-radius) var(--border-radius);
   }
-  
+
   .language-option:hover {
     background-color: var(--roma-offwhite);
   }
-  
+
   .language-option.active {
     background-color: var(--roma-blue-dark);
     color: var(--roma-white);
     font-weight: 600;
   }
-  
+
   .flag {
     font-size: 1.25rem;
   }
-  
+
   .lang-name {
     font-size: 0.875rem;
   }
-  
+
   @media (max-width: 768px) {
     .language-button {
       padding: 0.5rem 0.75rem;
     }
-    
+
     .lang-name {
       display: none;
     }
@@ -163,15 +171,17 @@ const getLanguageUrl = (langCode: string) => {
 
 <script>
   // Close dropdown when clicking outside
-  document.addEventListener('click', (e) => {
-    const switcher = document.querySelector('.language-switcher');
+  document.addEventListener("click", (e) => {
+    const switcher = document.querySelector(".language-switcher");
     const target = e.target as HTMLElement;
-    
+
     if (switcher && !switcher.contains(target)) {
-      const dropdown = switcher.querySelector('.language-dropdown') as HTMLElement;
+      const dropdown = switcher.querySelector(
+        ".language-dropdown",
+      ) as HTMLElement;
       if (dropdown) {
-        dropdown.style.opacity = '0';
-        dropdown.style.visibility = 'hidden';
+        dropdown.style.opacity = "0";
+        dropdown.style.visibility = "hidden";
       }
     }
   });

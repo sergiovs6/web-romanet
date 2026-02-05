@@ -1,5 +1,6 @@
 ---
 lang: es
+translationId: project-launch-2025
 title: Lanzamiento Oficial del Proyecto RomaNET
 pubDate: 2025-01-20
 description: El proyecto RomaNET inicia su misión de combatir el discurso de odio contra las comunidades romaníes usando tecnología IA innovadora

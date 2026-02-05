@@ -1,5 +1,6 @@
 ---
 lang: it
+translationId: project-launch-2025
 title: Lancio Ufficiale del Progetto RomaNET
 pubDate: 2025-01-20
 description: Il progetto RomaNET avvia la sua missione per combattere il discorso d'odio contro le comunità rom usando tecnologia IA innovativa
