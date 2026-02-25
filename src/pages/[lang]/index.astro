@@ -1,101 +1,120 @@
 ---
-import Layout from '../../layouts/Layout.astro';
-import Card from '../../components/Card.astro';
-import { getEntry } from 'astro:content';
+import Layout from "../../layouts/Layout.astro";
+import Card from "../../components/Card.astro";
+import { getEntry, getCollection } from "astro:content";
 
 export function getStaticPaths() {
   return [
-    { params: { lang: 'en' } },
-    { params: { lang: 'es' } },
-    { params: { lang: 'it' } },
-    { params: { lang: 'gr' } }
+    { params: { lang: "en" } },
+    { params: { lang: "es" } },
+    { params: { lang: "it" } },
+    { params: { lang: "gr" } },
   ];
 }
 
-const { lang } = Astro.params as { lang: 'en' | 'es' | 'it' | 'gr' };
+const { lang } = Astro.params as { lang: "en" | "es" | "it" | "gr" };
 
 // Get the home page content
-const homePage = await getEntry('pages', `${lang}/home`);
+const homePage = await getEntry("pages", `${lang}/home`);
 const { Content } = homePage ? await homePage.render() : { Content: null };
+
+// Get latest news for this language
+const allNews = await getCollection("news", ({ id }) => {
+  return id.startsWith(`${lang}/`);
+});
+
+// Sort by date and get the 3 most recent
+const latestNews = allNews
+  .sort(
+    (a, b) =>
+      new Date(b.data.pubDate).getTime() - new Date(a.data.pubDate).getTime(),
+  )
+  .slice(0, 3);
 
 // Translations for CTA buttons
 const translations = {
   en: {
-    cta1: 'Know Your Rights',
-    cta2: 'Report Hate Speech',
-    cta3: 'Explore Counter-Narratives',
-    latestNews: 'Latest News'
+    cta1: "Know Your Rights",
+    cta2: "Report Hate Speech",
+    cta3: "Explore Counter-Narratives",
+    latestNews: "Latest News",
+    readMore: "Read more",
   },
   es: {
-    cta1: 'Conoce Tus Derechos',
-    cta2: 'Denunciar Discurso de Odio',
-    cta3: 'Explorar Contra-Narrativas',
-    latestNews: 'Últimas Noticias'
+    cta1: "Conoce Tus Derechos",
+    cta2: "Denunciar Discurso de Odio",
+    cta3: "Explorar Contra-Narrativas",
+    latestNews: "Últimas Noticias",
+    readMore: "Leer más",
   },
   it: {
-    cta1: 'Conosci i Tuoi Diritti',
-    cta2: 'Segnala Discorsi d\'Odio',
-    cta3: 'Esplora Contro-Narrative',
-    latestNews: 'Ultime Notizie'
+    cta1: "Conosci i Tuoi Diritti",
+    cta2: "Segnala Discorsi d'Odio",
+    cta3: "Esplora Contro-Narrative",
+    latestNews: "Ultime Notizie",
+    readMore: "Leggi di più",
   },
   gr: {
-    cta1: 'Γνωρίστε τα Δικαιώματά σας',
-    cta2: 'Αναφέρετε Λόγο Μίσους',
-    cta3: 'Εξερευνήστε Αντι-Αφηγήσεις',
-    latestNews: 'Τελευταία Νέα'
-  }
+    cta1: "Γνωρίστε τα Δικαιώματά σας",
+    cta2: "Αναφέρετε Λόγο Μίσους",
+    cta3: "Εξερευνήστε Αντι-Αφηγήσεις",
+    latestNews: "Τελευταία Νέα",
+    readMore: "Διαβάστε περισσότερα",
+  },
 };
 
 const t = translations[lang];
 ---
 
-<Layout 
-  title={homePage?.data.title || 'Home'} 
-  description={homePage?.data.description || 'RomaNET is a European project created to fight hate speech and hate crimes against Roma communities'}
+<Layout
+  title={homePage?.data.title || "Home"}
+  description={homePage?.data.description ||
+    "RomaNET is a European project created to fight hate speech and hate crimes against Roma communities"}
   lang={lang}
 >
   <div class="hero">
-    <h1>{homePage?.data.tagline || 'We Stand United Against Discrimination'}</h1>
+    <h1>
+      {homePage?.data.tagline || "We Stand United Against Discrimination"}
+    </h1>
     <p>
-      {homePage?.data.description || 'RomaNET is a European project created to fight hate speech and hate crimes against Roma communities, encompassing AI in the creation of positive counter narratives'}
+      {
+        homePage?.data.description ||
+          "RomaNET is a European project created to fight hate speech and hate crimes against Roma communities, encompassing AI in the creation of positive counter narratives"
+      }
     </p>
-    
+
     <div class="hero-cta">
       <a href={`/${lang}/report`} class="btn btn-primary">{t.cta1}</a>
       <a href={`/${lang}/report`} class="btn btn-accent">{t.cta2}</a>
       <a href={`/${lang}/ai-against-hate`} class="btn">{t.cta3}</a>
     </div>
   </div>
-  
-  {Content && (
-    <div class="content">
-      <Content />
-    </div>
-  )}
-  
-  <section class="latest-news">
-    <h2>{t.latestNews}</h2>
-    <div class="grid grid-3">
-      <Card
-        title="Project Launch"
-        description="RomaNET officially launches its mission to combat hate speech against Roma communities"
-        link={`/${lang}/news`}
-        category="Project News"
-      />
-      <Card
-        title="Training Program"
-        description="Join our upcoming training sessions on identifying and reporting hate speech"
-        link={`/${lang}/news`}
-        category="Events & Trainings"
-      />
-      <Card
-        title="AI Innovation"
-        description="Discover how artificial intelligence is being used to create positive counter-narratives"
-        link={`/${lang}/ai-against-hate`}
-        category="AI Against Hate"
-      />
-    </div>
-  </section>
+
+  {
+    Content && (
+      <div class="content">
+        <Content />
+      </div>
+    )
+  }
+
+  <div class="content">
+    <section class="latest-news">
+      <h2>{t.latestNews}</h2>
+      <div class="grid grid-3">
+        {
+          latestNews.map((news) => (
+            <Card
+              title={news.data.title}
+              description={news.data.description}
+              link={`/${lang}/news/${news.slug.split("/")[1]}`}
+              category={news.data.category}
+            />
+          ))
+        }
+      </div>
+    </section>
+  </div>
 </Layout>
 
 <style>
@@ -106,11 +125,11 @@ const t = translations[lang];
     flex-wrap: wrap;
     margin-top: var(--spacing-lg);
   }
-  
+
   .latest-news {
     margin-top: var(--spacing-xl);
   }
-  
+
   .latest-news h2 {
     text-align: center;
     margin-bottom: var(--spacing-lg);

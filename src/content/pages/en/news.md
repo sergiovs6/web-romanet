@@ -1,7 +1,7 @@
 ---
 lang: en
 title: News
-description: Stay updated with the latest news from RomaNET, including project updates, events, and calls to action
+description: Latest updates from RomaNET - project milestones, events, and calls to action
 ---
 
 ## Stay Informed

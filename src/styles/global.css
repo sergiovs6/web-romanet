@@ -6,40 +6,40 @@
   --roma-black: #060606;
   --roma-white: #FEFEFE;
   --roma-offwhite: #ECE2D7;
-  
+
   /* Blues */
   --roma-blue-dark: #1F3C4F;
   --roma-blue-soft: #5E7381;
-  
+
   /* Reds & Pinks */
   --roma-red: #ED4143;
   --roma-pink: #F86D74;
   --roma-pink-light: #FA9FA1;
-  
+
   /* Greens */
   --roma-green: #1D9939;
   --roma-green-soft: #55B471;
-  
+
   /* Yellows & Warm Colors */
   --roma-yellow: #E4A73C;
   --roma-mustard: #EBBD6D;
   --roma-apricot: #F0D3A0;
-  
+
   /* Semantic Colors */
   --color-primary: var(--roma-blue-dark);
   --color-secondary: var(--roma-red);
   --color-accent: var(--roma-green);
-  --color-background: var(--roma-white);
-  --color-text: var(--roma-black);
-  --color-text-light: var(--roma-blue-soft);
-  
+  --color-background: var(--roma-blue-dark);
+  --color-text: var(--roma-white);
+  --color-text-light: var(--roma-offwhite);
+
   /* Spacing */
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
   --spacing-md: 2rem;
   --spacing-lg: 3rem;
   --spacing-xl: 4rem;
-  
+
   /* Typography */
   --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
   --font-size-base: 1rem;
@@ -48,7 +48,7 @@
   --font-size-xl: 1.5rem;
   --font-size-2xl: 2rem;
   --font-size-3xl: 3rem;
-  
+
   /* Layout */
   --max-width: 1200px;
   --border-radius: 0.5rem;
@@ -69,28 +69,40 @@ html {
   color: var(--color-text);
   background-color: var(--color-background);
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 main {
   flex: 1;
   width: 100%;
-  max-width: var(--max-width);
+  max-width: 100%;
   margin: 0 auto;
   padding: var(--spacing-md);
+  background-color: var(--roma-blue-dark);
+  color: var(--roma-white);
 }
 
-/* Typography */
-h1, h2, h3, h4, h5, h6 {
-  color: var(--color-primary);
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--roma-white);
   line-height: 1.2;
-  margin-bottom: var(--spacing-sm);
   font-weight: 700;
+}
+
+.content {
+  max-width: var(--max-width);
+  margin: 0 auto;
 }
 
 h1 {
@@ -197,6 +209,24 @@ a:hover {
   margin-top: var(--spacing-lg);
 }
 
+/* Grid Layouts */
+.grid {
+  display: grid;
+  gap: var(--spacing-lg);
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--spacing-lg);
+}
+
+@media (max-width: 768px) {
+  .grid-3 {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* Cards */
 .card {
   background: var(--roma-white);
@@ -253,11 +283,11 @@ a:hover {
     --font-size-2xl: 1.5rem;
     --font-size-xl: 1.25rem;
   }
-  
+
   main {
     padding: var(--spacing-sm);
   }
-  
+
   .hero {
     padding: var(--spacing-md);
   }
@@ -275,7 +305,8 @@ a:hover {
   margin: var(--spacing-md) 0;
 }
 
-.content ul, .content ol {
+.content ul,
+.content ol {
   margin-left: var(--spacing-md);
   margin-bottom: var(--spacing-sm);
 }
